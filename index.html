@@ -1,22 +1,85 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
- <meta charset="UTF-8">
- <title>Praktikum Azure Static Web Apps</title>
- <style>
- body { font-family: Arial; margin: 40px; background: #f4f6f8; }
- .container { background: white; padding: 24px; border-radius: 12px; }
- h1 { color: #1f4e79; }
- </style>
+    <meta charset="UTF-8">
+    <title>Mini Project - Estimasi Biaya Kegiatan</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f6f8; color: #333; }
+        .container { background: white; padding: 24px; border-radius: 12px; max-width: 500px; margin: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1, h2 { color: #1f4e79; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, button { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
+        button { background: #1f4e79; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #143554; }
+        .result { margin-top: 20px; padding: 15px; background: #eef5fc; border-left: 5px solid #1f4e79; border-radius: 4px; display: none; }
+        .identity { margin-top: 30px; font-size: 0.85em; color: #666; text-align: center; border-top: 1px solid #ddd; padding-top: 15px; }
+    </style>
 </head>
 <body>
- <div class="container">
- <h1>Praktikum Azure Static Web Apps</h1>
- <p>Halaman ini berhasil di-deploy menggunakan Azure Static Web Apps.</p>
- <p>Layanan: Azure Static Web Apps</p>
- <p>Deployment: GitHub Repository</p>
- <p>Nama: Zhafira Aqila Noorhida</p>
- <p>NIM: 0920240012</p>
- </div>
+
+<div class="container">
+    <h1>Informasi Kegiatan Mahasiswa</h1>
+    <p style="text-align: center;">Sistem Hitung Estimasi Biaya Konsumsi Kegiatan</p>
+    
+    <hr>
+
+    <h2>Hitung Biaya</h2>
+    <div class="form-group">
+        <label for="jumlah">Jumlah Peserta:</label>
+        <input type="number" id="jumlah" value="40" min="1">
+    </div>
+    <div class="form-group">
+        <label for="jenis">Jenis Konsumsi:</label>
+        <select id="jenis">
+            <option value="snack">Snack (Rp15.000)</option>
+            <option value="makan">Makan (Rp30.000)</option>
+            <option value="lengkap">Lengkap (Rp45.000)</option>
+        </select>
+    </div>
+    <button onclick="hitungBiaya()">Hitung Estimasi</button>
+
+    <div id="resultBox" class="result">
+        <h3>Hasil Estimasi:</h3>
+        <p><strong>Jumlah Peserta:</strong> <span id="resJumlah"></span></p>
+        <p><strong>Jenis Konsumsi:</strong> <span id="resJenis"></span></p>
+        <p><strong>Harga per Peserta:</strong> Rp<span id="resHarga"></span></p>
+        <p><strong>Total Estimasi:</strong> <strong>Rp<span id="resTotal"></span></strong></p>
+        <p><small>Waktu Hitung: <span id="resTime"></span></small></p>
+    </div>
+
+    <div class="identity">
+        <p><strong>Identitas Praktikum:</strong> Mini Project Serverless Azure</p>
+        <p><strong>Nama:</strong> Zhafira Aqila Noorhida</p>
+        <p><strong>NIM:</strong> 0920240012</p>
+        <p><strong>Layanan Azure:</strong> Azure Static Web Apps & Azure Functions</p>
+    </div>
+</div>
+
+<script>
+    async function hitungBiaya() {
+        const jumlah = document.getElementById('jumlah').value;
+        const jenis = document.getElementById('jenis').value;
+        
+        const url = `https://URL_FUNCTION_APP_KAMU/api/HttpPraktikum?jumlah=${jumlah}&jenis=${jenis}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            document.getElementById('resJumlah').innerText = data.jumlah;
+            document.getElementById('resJenis').innerText = data.jenis;
+            document.getElementById('resHarga').innerText = data.hargaPerPeserta.toLocaleString('id-ID');
+            document.getElementById('resTotal').innerText = data.total.toLocaleString('id-ID');
+            document.getElementById('resTime').innerText = data.timestamp;
+
+            document.getElementById('resultBox').style.display = 'block';
+        } catch (error) {
+            alert('Gagal mengambil data dari API Azure Functions. Pastikan URL sudah benar dan CORS diizinkan.');
+            console.error(error);
+        }
+    }
+</script>
+
 </body>
 </html>
