@@ -61,7 +61,7 @@
         const jumlah = document.getElementById('jumlah').value;
         const jenis = document.getElementById('jenis').value;
         
-        const url = `https://func-serverless-0920240012-haheaschhjf0f5gh.eastasia-01.azurewebsites.net/api/HttpPraktikum`;
+        const url = `https://func-serverless-0920240012-haheaschhjf0f5gh.eastasia-01.azurewebsites.net/api/HttpPraktikum?jumlah=${jumlah}&jenis=${jenis}`;
 
         try {
             const response = await fetch(url);
